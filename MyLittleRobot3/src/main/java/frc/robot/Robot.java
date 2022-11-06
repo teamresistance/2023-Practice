@@ -18,8 +18,8 @@ import frc.robot.subsystem.LEDControl;
  */
 public class Robot extends TimedRobot {
 
-	public LEDControl ledCtl = new LEDControl();
-	// public LEDControl ledCtl = new LEDControl(0, 1, 2);
+	// public LEDControl ledCtl = new LEDControl();
+	public LEDControl ledCtl = new LEDControl(0, 1, 2);
 
 	/**
 	 * This function is run when the robot is first started up and should be used

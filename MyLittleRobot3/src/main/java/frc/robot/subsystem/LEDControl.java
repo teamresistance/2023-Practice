@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 /** Interlock 3 DI's to control 3 DO's. */
 public class LEDControl {
 	//Declare Hardware Inputs
-    private static DigitalOutput ledRed = new DigitalOutput(0);
-	private static DigitalOutput ledYel = new DigitalOutput(1);
-	private static DigitalOutput ledGrn = new DigitalOutput(2);
+    private static DigitalOutput ledRed;  // = new DigitalOutput(0);
+	private static DigitalOutput ledYel;  // = new DigitalOutput(1);
+	private static DigitalOutput ledGrn;  // = new DigitalOutput(2);
 	//Declare and define hardware outputs
 	private static DigitalInput btnRed = new DigitalInput(4);
 	private static DigitalInput btnYel = new DigitalInput(5);
