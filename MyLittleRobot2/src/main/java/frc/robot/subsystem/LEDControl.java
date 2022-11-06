@@ -122,6 +122,7 @@ public class LEDControl {
 
 		// int a = 0;  //temp, used to add break point.
 
+		// //Simple way to do the above.  Above is easier to modify quickly.
         // if (btnRed.get()) {
 		// 	ledRed.set(true);
 		// } else {
