@@ -15,9 +15,9 @@ import frc.io.joysticks.util.Button;
 /** Interlock 3 DI's to control 3 DO's. */
 public class LEDControl {
 	//Declare Hardware Inputs
-    private static DigitalOutput ledRed;  // = new DigitalOutput(0);
-	private static DigitalOutput ledYel;  // = new DigitalOutput(1);
-	private static DigitalOutput ledGrn;  // = new DigitalOutput(2);
+    private static DigitalOutput ledRed = IO.doLedRed;  //new DigitalOutput(0);
+	private static DigitalOutput ledYel = IO.doLedYel;  //new DigitalOutput(1);
+	private static DigitalOutput ledGrn = IO.doLedGrn;  //new DigitalOutput(2);
 	//Declare and define hardware outputs
 	private static InvertibleDigitalInput btnRed = IO.diBtnRed; //new DigitalInput(4);
 	private static InvertibleDigitalInput btnYel = IO.diBtnYel; //new DigitalInput(5);
@@ -51,10 +51,14 @@ public class LEDControl {
 	 * @param inpChlGrn DIO input channel for the Green button
 	 */
 	public LEDControl(int inpChlRed, int inpChlYel, int inpChlGrn){
-		//Define Inputs
-		ledRed = new DigitalOutput(inpChlRed);
-		ledYel = new DigitalOutput(inpChlYel);
-		ledGrn = new DigitalOutput(inpChlGrn);
+		//Define Inputs  --- CANNOT do this if defineing hdw in hdw_IO/IO.java ---
+		// ledRed = new DigitalOutput(inpChlRed);
+		// ledYel = new DigitalOutput(inpChlYel);
+		// ledGrn = new DigitalOutput(inpChlGrn);
+		// btnRed = IO.diBtnRed; //new DigitalInput(4);
+		// btnYel = IO.diBtnYel; //new DigitalInput(5);
+		// btnGrn = IO.diBtnGrn; //new DigitalInput(6);
+	
 	}
 
 	public static void init(){
