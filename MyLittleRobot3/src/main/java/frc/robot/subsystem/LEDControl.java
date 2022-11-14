@@ -6,9 +6,11 @@ package frc.robot.subsystem;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.io.hdw_io.IO;
+import frc.io.hdw_io.util.InvertibleDigitalInput;
+import frc.io.joysticks.JS_IO;
+import frc.io.joysticks.util.Button;
 
 /** Interlock 3 DI's to control 3 DO's. */
 public class LEDControl {
@@ -17,21 +19,13 @@ public class LEDControl {
 	private static DigitalOutput ledYel;  // = new DigitalOutput(1);
 	private static DigitalOutput ledGrn;  // = new DigitalOutput(2);
 	//Declare and define hardware outputs
-	private static DigitalInput btnRed = new DigitalInput(4);
-	private static DigitalInput btnYel = new DigitalInput(5);
-	private static DigitalInput btnGrn = new DigitalInput(6);
-
-	//Joystick(s)
-	public static Joystick js1 = new Joystick(3);
-	public static XboxController xb1 = new XboxController(4);
-	// public static JoystickButton btnR = new JoystickButton(js1, 2);
-	// public static JoystickButton btnY = new JoystickButton(js1, 4);
-	// public static JoystickButton btnG = new JoystickButton(js1, 1);
-
-	public static Joystick nt1 = new Joystick(5);
-	public static JoystickButton btnR; // = new JoystickButton(nt1, 2);
-	public static JoystickButton btnY; // = new JoystickButton(nt1, 3);
-	public static JoystickButton btnG; // = new JoystickButton(nt1, 4);
+	private static InvertibleDigitalInput btnRed = IO.diBtnRed; //new DigitalInput(4);
+	private static InvertibleDigitalInput btnYel = IO.diBtnYel; //new DigitalInput(5);
+	private static InvertibleDigitalInput btnGrn = IO.diBtnGrn; //new DigitalInput(6);
+	//Declare & define joystick axises, buttons & pov's
+	private static Button tgrRed = JS_IO.jsBtnRed; // = new JoystickButton(nt1, 2);
+	private static Button tgrYel = JS_IO.jsBtnYel; // = new JoystickButton(nt1, 3);
+	private static Button tgrGrn = JS_IO.jsBtnGrn; // = new JoystickButton(nt1, 4);
 
 	//Variables
 	private static int btnEncode = 0;
@@ -64,12 +58,24 @@ public class LEDControl {
 	}
 
 	public static void init(){
+		// tgrRed = JS_IO.jsBtnRed; // = new JoystickButton(nt1, 2);
+		// tgrYel = JS_IO.jsBtnYel; // = new JoystickButton(nt1, 3);
+		// tgrGrn = JS_IO.jsBtnGrn; // = new JoystickButton(nt1, 4);
 	}
+	
 	/**
 	 * Update the LEDs based on associated DI's.
 	 */
 	public static void update(){
-		btnEncode = enc3Bool(btnRed.get(), btnYel.get(), btnGrn.get());
+		btnEncode = enc3Bool(tgrRed.isDown(), tgrYel.isDown(), tgrGrn.isDown());
+		// btnEncode = tgrRed.isDown() ? 1 : 0;
+		// System.out.print("jsRed isDn? " + tgrRed.isDown());
+		// System.out.print("\tjsRed btnID? " + tgrRed.getButtonID());
+		// System.out.print("\tjsRed ex? " + tgrRed.getExists());
+		// System.out.println("\tjsRed exDflt? " + tgrRed.getExistDflt());
+        SmartDashboard.putBoolean("LED/Red Btn", tgrRed.isDown());
+        SmartDashboard.putBoolean("LED/Yel Btn", tgrYel.isDown());
+        SmartDashboard.putBoolean("LED/Grn Btn", tgrGrn.isDown());
 
 		switch(btnEncode){
 			case 0:

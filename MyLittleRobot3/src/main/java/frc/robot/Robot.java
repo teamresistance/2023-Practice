@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.io.joysticks.JS_IO;
 import frc.robot.subsystem.LEDControl;
 
 /**
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
+		JS_IO.init();
 	}
 
 	/**
@@ -40,6 +42,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotPeriodic() {
+		JS_IO.update();
 	}
 
 	/** This function is called once when autonomous is enabled. */
@@ -55,14 +58,16 @@ public class Robot extends TimedRobot {
 	/** This function is called once when teleop is enabled. */
 	@Override
 	public void teleopInit() {
+		// ledCtl.init();
+		LEDControl.init();
 	}
 
 	/** This function is called periodically during operator control. */
 	@Override
 	public void teleopPeriodic() {
-		ledCtl.update();
-		// LEDControl.update();
-		// ledCtl.ledRed.set(false);
+		// ledCtl.update();
+		LEDControl.update();			//Don't need to create an instance of class if static.
+		// ledCtl.ledRed.set(false);	//Example of overriding class control if obj is made public
 	}
 
 	/** This function is called once when the robot is disabled. */

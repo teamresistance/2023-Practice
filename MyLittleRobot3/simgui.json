@@ -14,12 +14,23 @@
       "/LiveWindow/Ungrouped/DigitalInput[6]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalOutput[0]": "Digital Output",
       "/LiveWindow/Ungrouped/DigitalOutput[1]": "Digital Output",
-      "/LiveWindow/Ungrouped/DigitalOutput[2]": "Digital Output"
+      "/LiveWindow/Ungrouped/DigitalOutput[2]": "Digital Output",
+      "/SmartDashboard/JS/Choice": "String Chooser"
+    },
+    "windows": {
+      "/SmartDashboard/JS/Choice": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables": {
     "SmartDashboard": {
       "JS": {
+        "open": true
+      },
+      "LED": {
         "open": true
       },
       "open": true
