@@ -62,7 +62,7 @@ public class JS_IO {
         for(int i = 0; i < chsrDesc.length; i++){
             chsr.addOption(chsrDesc[i], chsrDesc[i]);
         }
-        chsr.setDefaultOption(chsrDesc[3], chsrDesc[3]);    //Chg index to select chsrDesc[] for default
+        chsr.setDefaultOption(chsrDesc[2], chsrDesc[2]);    //Chg index to select chsrDesc[] for default
         SmartDashboard.putData("JS/Choice", chsr);
         update();   //Update the JS assignments
     }
@@ -131,6 +131,7 @@ public class JS_IO {
         jsBtnRed.setButton(leftJoystick, 3);
         jsBtnYel.setButton(rightJoystick, 3);
         jsBtnGrn.setButton(coJoystick, 3);
+        jsBtnLeft.setButton(coJoystick, 4);
 
     }
 
@@ -166,6 +167,7 @@ public class JS_IO {
         jsBtnRed.setButton(neoPad, 2);        //1 (A)
         jsBtnYel.setButton(neoPad, 3);        //1 (A)
         jsBtnGrn.setButton(neoPad, 4);        //1 (A)
+        jsBtnLeft.setButton(neoPad, 5);        //1 (A)
 
     }
 
