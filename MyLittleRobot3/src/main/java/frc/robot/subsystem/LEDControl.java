@@ -12,20 +12,22 @@ import frc.io.hdw_io.util.InvertibleDigitalInput;
 import frc.io.joysticks.JS_IO;
 import frc.io.joysticks.util.Button;
 
-/** Interlock 3 DI's to control 3 DO's. */
+/** Interlock 3 DI's (or joystick buttons) to control 3 DO's. */
 public class LEDControl {
-	//Declare Hardware Inputs
+	//Declare Hardware Inputs.  Or reference hdw defined in IO.java.
     private static DigitalOutput ledRed = IO.doLedRed;  //new DigitalOutput(0);
 	private static DigitalOutput ledYel = IO.doLedYel;  //new DigitalOutput(1);
 	private static DigitalOutput ledGrn = IO.doLedGrn;  //new DigitalOutput(2);
-	//Declare and define hardware outputs
+	//Declare and define hardware outputs  Or reference hdw defined in IO.java.
 	private static InvertibleDigitalInput btnRed = IO.diBtnRed; //new DigitalInput(4);
 	private static InvertibleDigitalInput btnYel = IO.diBtnYel; //new DigitalInput(5);
 	private static InvertibleDigitalInput btnGrn = IO.diBtnGrn; //new DigitalInput(6);
-	//Declare & define joystick axises, buttons & pov's
+	private static InvertibleDigitalInput btnLeft; // = IO.diBtnGrn; //new DigitalInput(6);	
+	//Declare & define joystick axises, buttons & pov's.  Or reference buttons defined JS_IO.java.
 	private static Button tgrRed = JS_IO.jsBtnRed; // = new JoystickButton(nt1, 2);
 	private static Button tgrYel = JS_IO.jsBtnYel; // = new JoystickButton(nt1, 3);
 	private static Button tgrGrn = JS_IO.jsBtnGrn; // = new JoystickButton(nt1, 4);
+	private static Button tgrLeft = JS_IO.jsBtnLeft; // = new JoystickButton(nt1, 1);
 
 	//Variables
 	private static int btnEncode = 0;
@@ -39,6 +41,7 @@ public class LEDControl {
 		// ledRed = new DigitalOutput(0);
 		// ledYel = new DigitalOutput(1);
 		// ledGrn = new DigitalOutput(2);
+		//or
 		this(0, 1, 2);
 	}
 
@@ -51,7 +54,7 @@ public class LEDControl {
 	 * @param inpChlGrn DIO input channel for the Green button
 	 */
 	public LEDControl(int inpChlRed, int inpChlYel, int inpChlGrn){
-		//Define Inputs  --- CANNOT do this if defineing hdw in hdw_IO/IO.java ---
+		//Define Inputs  --- CANNOT do this if defining hdw in hdw_IO/IO.java ---
 		// ledRed = new DigitalOutput(inpChlRed);
 		// ledYel = new DigitalOutput(inpChlYel);
 		// ledGrn = new DigitalOutput(inpChlGrn);
@@ -61,71 +64,59 @@ public class LEDControl {
 	
 	}
 
+
+	/**
+	 * Initialize anything needed for LEDControl.
+	 * <p>Usually called from robot.java.
+	 */
 	public static void init(){
 		// tgrRed = JS_IO.jsBtnRed; // = new JoystickButton(nt1, 2);
 		// tgrYel = JS_IO.jsBtnYel; // = new JoystickButton(nt1, 3);
 		// tgrGrn = JS_IO.jsBtnGrn; // = new JoystickButton(nt1, 4);
+		cmdUpdate(false, false, false);
 	}
 	
 	/**
-	 * Update the LEDs based on associated DI's.
+	 * Update the LEDs based on associated DI's or joysticks.
+	 * <p>Usually called from robot.java.
 	 */
 	public static void update(){
+		sdbUpdate();
 		btnEncode = enc3Bool(tgrRed.isDown(), tgrYel.isDown(), tgrGrn.isDown());
+		// btnEncode = enc3Bool(btnRed.get(), btnYel.get(), btnGrn.get());
 		// btnEncode = tgrRed.isDown() ? 1 : 0;
 		// System.out.print("jsRed isDn? " + tgrRed.isDown());
 		// System.out.print("\tjsRed btnID? " + tgrRed.getButtonID());
 		// System.out.print("\tjsRed ex? " + tgrRed.getExists());
 		// System.out.println("\tjsRed exDflt? " + tgrRed.getExistDflt());
-        SmartDashboard.putBoolean("LED/Red Btn", tgrRed.isDown());
-        SmartDashboard.putBoolean("LED/Yel Btn", tgrYel.isDown());
-        SmartDashboard.putBoolean("LED/Grn Btn", tgrGrn.isDown());
 
 		switch(btnEncode){
 			case 0:
-			ledRed.set(false);
-			ledYel.set(false);
-			ledGrn.set(false);
+			cmdUpdate(false, false, false);
 			break;
 			case 1:
-			ledRed.set(false);
-			ledYel.set(false);
-			ledGrn.set(true);
+			cmdUpdate(false, false, true);
 			break;
 			case 2:
-			ledRed.set(false);
-			ledYel.set(true);
-			ledGrn.set(false);
+			cmdUpdate(false, true, false);
 			break;
 			case 3:
-			ledRed.set(false);
-			ledYel.set(true);
-			ledGrn.set(true);
+			cmdUpdate(false, true, true);
 			break;
 			case 4:
-			ledRed.set(true);
-			ledYel.set(false);
-			ledGrn.set(false);
+			cmdUpdate(true, false, false);
 			break;
 			case 5:
-			ledRed.set(true);
-			ledYel.set(false);
-			ledGrn.set(true);
+			cmdUpdate(true, false, true);
 			break;
 			case 6:
-			ledRed.set(true);
-			ledYel.set(true);
-			ledGrn.set(false);
+			cmdUpdate(true, true, false);
 			break;
 			case 7:
-			ledRed.set(true);
-			ledYel.set(true);
-			ledGrn.set(true);
+			cmdUpdate(true, true, true);
 			break;
 			default:
-			ledRed.set(false);
-			ledYel.set(false);
-			ledGrn.set(false);
+			cmdUpdate(false, false, false);
 			System.out.println("Bad selection");
 
 		}
@@ -133,15 +124,54 @@ public class LEDControl {
 		// int a = 0;  //temp, used to add break point.
 
 		// //Simple way to do the above.  Above is easier to modify quickly.
-        // if (btnRed.get()) {
+        // if (btnRed.get()) {							//Ex. if/then/else
 		// 	ledRed.set(true);
 		// } else {
 		// 	if(btnGrn.get()) ledRed.set(false);
 		// }
-		// ledYel.set((btnYel.get() ? true : false));	//Leson 33, Selection Op
-		// ledGrn.set(btnGrn.get());
+		// ledYel.set((btnYel.get() ? true : false));	//Ex. BPJ Lesson 33, Selection Op
+		// ledGrn.set(btnGrn.get());					//Ex. Just pass DI value.
 
 	}
+
+	/**
+	 * Issue ALL hdw commands from here.
+	 * <p>trgLeft is a safety!  IF true all LEDs must turn off!
+	 * @param redCmd
+	 * @param yelCmd
+	 * @param grnCmd
+	 */
+	private static void cmdUpdate(boolean redCmd, boolean yelCmd, boolean grnCmd){
+		if(tgrLeft.isDown()){
+			System.out.println("Here1");
+			ledRed.set(false);
+			ledYel.set(false);
+			ledGrn.set(false);	
+		}else{
+			System.out.println("Here2");
+			ledRed.set(redCmd);
+			ledYel.set(yelCmd);
+			ledGrn.set(grnCmd);
+		}
+	}
+
+	/**
+	 * Initialize the Smartdashboard with items that need to be read from later.
+	 * Items that we may want to adjust.
+	 */
+	private static void sdbInit(){
+	}
+
+	/**
+	 * Update to Smartdashboard.
+	 */
+	private static void sdbUpdate(){
+        SmartDashboard.putBoolean("LED/Red Trigger", tgrRed.isDown());
+        SmartDashboard.putBoolean("LED/Yel Trigger", tgrYel.isDown());
+        SmartDashboard.putBoolean("LED/Grn Trigger", tgrGrn.isDown());
+        SmartDashboard.putBoolean("LED/Left Trigger", tgrLeft.isDown());
+	}
+
 	/**
 	 * 
 	 * @param b2, most significant bit

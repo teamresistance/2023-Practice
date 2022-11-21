@@ -41,6 +41,7 @@ public class JS_IO {
     public static Button jsBtnRed= new Button();
     public static Button jsBtnYel = new Button();
     public static Button jsBtnGrn = new Button();
+    public static Button jsBtnLeft = new Button();
 
      // Constructor not needed, bc
     public JS_IO() {
@@ -53,9 +54,10 @@ public class JS_IO {
 
     //---- Joystick controller chooser ----
     private static SendableChooser<String> chsr = new SendableChooser<String>();
+    /**Joystick strings to ID chooser selections. */
     private static final String[] chsrDesc = {"3-Joysticks", "2-Joysticks", "Gamepad", "Nintendo"};
 
-    /** Setup the JS Chooser */
+    /** Setup the JS Chooser. <p>Called from Robot.java/robot.init. */
     public static void chsrInit(){
         for(int i = 0; i < chsrDesc.length; i++){
             chsr.addOption(chsrDesc[i], chsrDesc[i]);
@@ -65,10 +67,16 @@ public class JS_IO {
         update();   //Update the JS assignments
     }
 
+    /**HMMmm?  Called from below.  Might have been called from somewhere else 
+     * but deleted since then.  Might need to do some cleanup.
+     */
     public static void sdbUpdChsr(){
         SmartDashboard.putString("JS/Choosen", chsr.getSelected());   //Put selected on sdb
     }
 
+    /**Needs some serious cleanup.  Calls caseDefault() then calls configJS()
+     * which then calls caseDefault() again.
+     */
     public static void update() { // Chk for Joystick configuration
         // System.out.println("JS btn " + jsBtnRed.isDown());
         // System.out.println("Prv JS Assn: " + prvJSAssign + " =? "+ chsr.getSelected());
@@ -79,9 +87,6 @@ public class JS_IO {
             System.out.println("JS Chsn: " + chsr.getSelected());
             configJS();         //then assign new jsConfig
         }
-        SmartDashboard.putBoolean("JS/Red Btn", jsBtnRed.isDown());
-        SmartDashboard.putBoolean("JS/Yel Btn", jsBtnYel.isDown());
-        SmartDashboard.putBoolean("JS/Grn Btn", jsBtnGrn.isDown());
     }
 
     /**Configure a new JS assignment */
@@ -114,7 +119,9 @@ public class JS_IO {
 
     // ================ Controller actions ================
 
-    // ----------- Normal 3 Joysticks -------------
+    /**
+     * ---- Normal 3 Joysticks ----<p>This is the normal left, right & co-driver driver sticks.
+     */
     private static void norm3JS() {
         System.out.println("JS assigned to 3JS");
 
@@ -127,7 +134,17 @@ public class JS_IO {
 
     }
 
-    // ----- gamePad only --------
+    /**
+     * ---- Normal 2 Joysticks ----<p>Usually just the left & right driver sticks.
+     */
+    private static void norm2JS() {
+        System.out.println("JS assigned to 2JS");
+
+    }
+
+    /**
+     * ---- One Xbox Gamepad only ----<p>Usually for testing or demostrations.
+     */
     private static void a_GP() {
         System.out.println("JS assigned to GP");
 
@@ -135,16 +152,13 @@ public class JS_IO {
         jsBtnRed.setButton(gamePad, 2);        //1 (A)
         jsBtnYel.setButton(gamePad, 4);        //1 (A)
         jsBtnGrn.setButton(gamePad, 1);        //1 (A)
+        jsBtnLeft.setButton(gamePad, 5);        //1 (A)
 
     }
 
-    // ----------- Normal 2 Joysticks -------------
-    private static void norm2JS() {
-        System.out.println("JS assigned to 2JS");
-
-    }
-
-    // ----------- Nintendo gamepad -------------
+    /**
+     * ---- One Nintendo gamepad ----<p>Usually for just testing.
+     */
     private static void a_NP() {
         System.out.println("JS assigned to NP");
 
@@ -155,7 +169,12 @@ public class JS_IO {
 
     }
 
-    // ----------- Case Default -----------------
+    /**
+     * ----- Case Default -----
+     * <p>Clear ALL Joystick assignments & set defaults.
+     * <p>This sets up axis, button or pov to return a default value when they are not assigned.
+     * Prevents returning an undetermined value.
+     */
     private static void caseDefault() {
         System.out.println("JS assigned to null");
 
