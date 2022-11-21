@@ -31,6 +31,12 @@
         "open": true
       },
       "LED": {
+        "Out": {
+          "open": true
+        },
+        "Tgr": {
+          "open": true
+        },
         "open": true
       },
       "open": true
