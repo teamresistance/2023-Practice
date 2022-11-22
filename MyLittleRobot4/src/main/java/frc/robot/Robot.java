@@ -8,6 +8,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.io.hdw_io.IO;
 import frc.io.joysticks.JS_IO;
 import frc.robot.subsystem.LEDBlink;
+import frc.robot.subsystem.LEDBlink1;
+import frc.robot.subsystem.LEDBlink2;
+import frc.robot.subsystem.LEDBlink3;
+import frc.robot.subsystem.LEDBlink4;
 import frc.robot.subsystem.LEDControl;
 
 /**

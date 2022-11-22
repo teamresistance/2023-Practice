@@ -42,6 +42,7 @@ public class JS_IO {
     public static Button jsBtnYel = new Button();
     public static Button jsBtnGrn = new Button();
     public static Button jsBtnLeft = new Button();
+    public static Button jsBtnRight = new Button();
 
      // Constructor not needed, bc
     public JS_IO() {
@@ -127,11 +128,12 @@ public class JS_IO {
 
         // All stick axisesssss
 
-        // Misc
+        // Buttons
         jsBtnRed.setButton(leftJoystick, 3);
         jsBtnYel.setButton(rightJoystick, 3);
         jsBtnGrn.setButton(coJoystick, 3);
         jsBtnLeft.setButton(coJoystick, 4);
+        jsBtnRight.setButton(coJoystick, 5);
 
     }
 
@@ -149,11 +151,12 @@ public class JS_IO {
     private static void a_GP() {
         System.out.println("JS assigned to GP");
 
-        // Misc
-        jsBtnRed.setButton(gamePad, 2);        //1 (A)
-        jsBtnYel.setButton(gamePad, 4);        //1 (A)
-        jsBtnGrn.setButton(gamePad, 1);        //1 (A)
-        jsBtnLeft.setButton(gamePad, 5);        //1 (A)
+        // Button
+        jsBtnRed.setButton(gamePad, 2);
+        jsBtnYel.setButton(gamePad, 4);
+        jsBtnGrn.setButton(gamePad, 1);
+        jsBtnLeft.setButton(gamePad, 5);
+        jsBtnRight.setButton(gamePad, 6);
 
     }
 
@@ -163,11 +166,12 @@ public class JS_IO {
     private static void a_NP() {
         System.out.println("JS assigned to NP");
 
-        // Misc
-        jsBtnRed.setButton(neoPad, 2);        //1 (A)
-        jsBtnYel.setButton(neoPad, 3);        //1 (A)
-        jsBtnGrn.setButton(neoPad, 4);        //1 (A)
-        jsBtnLeft.setButton(neoPad, 5);        //1 (A)
+        // Button
+        jsBtnRed.setButton(neoPad, 2);
+        jsBtnYel.setButton(neoPad, 3);
+        jsBtnGrn.setButton(neoPad, 4);
+        jsBtnLeft.setButton(neoPad, 5);
+        jsBtnRight.setButton(neoPad, 7);
 
     }
 
@@ -180,10 +184,12 @@ public class JS_IO {
     private static void caseDefault() {
         System.out.println("JS assigned to null");
 
-        // Misc
-        jsBtnRed.setButton(null, 0);        //1 (A)
-        jsBtnYel.setButton(null, 0);        //1 (A)
-        jsBtnGrn.setButton(null, 0);        //1 (A)
+        // Buttons
+        jsBtnRed.setButton(null, 0);
+        jsBtnYel.setButton(null, 0);
+        jsBtnGrn.setButton(null, 0);
+        jsBtnLeft.setButton(null, 0);
+        jsBtnRight.setButton(null, 0);
 
     }
 }
