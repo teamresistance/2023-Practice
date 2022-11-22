@@ -22,10 +22,13 @@ public class LEDBlink {
 	private static Button tgrYel = JS_IO.jsBtnYel;
 	private static Button tgrGrn = JS_IO.jsBtnGrn;
 	private static Button tgrLeft = JS_IO.jsBtnLeft;
+	private static Button tgrRight = JS_IO.jsBtnRight;
 
 	//Variables
 	private static int state = 0;
-	private static Timer stateTmr = new Timer();
+	private static int newState = 0;
+	private static double delay = 1.0;
+	private static Timer stateTmr = new Timer(delay);
 
 	/**
 	 * Constructor, default.  No action, for standards only.
@@ -45,10 +48,19 @@ public class LEDBlink {
 	
 	/**
 	 * Update the LEDs based on associated triggers.
+	 * <p>When Red trigger is pressed blink Red for 1.0 sec. then Yel then Grn for 0.5 sec.
+	 * <p>Oh, Repeat sequences for Yel, Grn, Red & Grn, Red, Yel.
+	 * <p>BUT don't switch sequence until running sequence is complete.
+	 * <p>AND button should only need to be pressed, not held for upto 2 sec.
+	 * <p>AND After safety Left is released resume last sequence.  Right cancels all seq when done.
 	 * <p>Usually called from robot.java.
 	 */
 	public static void update(){
-		state = enc3Bool(tgrRed.isDown(), tgrYel.isDown(), tgrGrn.isDown());
+		if(tgrRight.isDown()) newState = 0;
+		if(tgrLeft.isDown()) state = 90;
+		if(tgrRed.isDown())  newState = 1;
+		if(tgrYel.isDown())  newState = 11;
+		if(tgrGrn.isDown())  newState = 21;
 
 		smUpdate();
 		sdbUpdate();
@@ -59,31 +71,76 @@ public class LEDBlink {
 	 */
 	public static void smUpdate(){
 		switch(state){
-			case 0:
+			case 0:	//All off
+			//         Red    Yel    Grn  Cmds
+			if(newState != 0) state = newState;
 			cmdUpdate(false, false, false);
 			break;
-			case 1:
-			cmdUpdate(false, false, true);
-			break;
-			case 2:
-			cmdUpdate(false, true, false);
-			break;
-			case 3:
-			cmdUpdate(false, true, true);
-			break;
-			case 4:
+			//--- Do Red trigger ---
+			case 1:	//Red for 1 sec.
+			if(stateTmr.hasExpired(delay, state)) state++;
 			cmdUpdate(true, false, false);
 			break;
-			case 5:
-			cmdUpdate(true, false, true);
+			case 2:	//Yel for 0.5 sec.
+			if(stateTmr.hasExpired(0.5, state)) state++;
+			cmdUpdate(false, true, false);
 			break;
-			case 6:
-			cmdUpdate(true, true, false);
+			case 3:	//Grn for 0.5 sec.  Return to Red
+			if(stateTmr.hasExpired(0.5, state)) state++;
+			cmdUpdate(false, false, true);
 			break;
-			case 7:
-			cmdUpdate(true, true, true);
+			case 4:	//Chk for other trigger else Return to Red
+			state = 1;
+			if(newState != 1) state = newState;
+			cmdUpdate(false, false, true);
 			break;
-			default:
+			//--- Do Yel trigger ---
+			case 11:	//Yel for 1 sec.
+			if(stateTmr.hasExpired(delay, state)) state++;
+			cmdUpdate(false, true, false);
+			break;
+			case 12:	//Grn for 0.5 sec.
+			if(stateTmr.hasExpired(0.5, state)) state++;
+			cmdUpdate(false, false, true);
+			break;
+			case 13:	//Red for 0.5 sec.  Return to Yel
+			if(stateTmr.hasExpired(0.5, state)) state++;
+			cmdUpdate(true, false, false);
+			break;
+			case 14:	//Chk for other trigger else Return to Yel
+			state = 11;
+			if(newState != 11) state = newState;
+			cmdUpdate(true, false, false);
+			break;
+			//--- Do Grn trigger ---
+			case 21:	//Grn for 1 sec.
+			if(stateTmr.hasExpired(delay, state)) state++;
+			cmdUpdate(false, false, true);
+			break;
+			case 22:	//Red for 0.5 sec.
+			if(stateTmr.hasExpired(0.5, state)) state++;
+			cmdUpdate(true, false, false);
+			break;
+			case 23:	//Yel for 0.5 sec.  Return to Grn
+			if(stateTmr.hasExpired(0.5, state)) state++;
+			cmdUpdate(false, true, false);
+			break;
+			case 24:	//Chk for other trigger else Return to Red
+			state = 21;
+			if(newState != 0) state = newState;
+			cmdUpdate(false, true, false);
+			break;
+			//All off but return to last seq.
+			case 90:	//All off but return.
+			if(!tgrLeft.isUp()) state++;
+			cmdUpdate(false, false, false);
+			break;
+			case 91:	//Clear the timer and return
+			stateTmr.clearTimer();
+			state = newState;
+			cmdUpdate(false, false, false);
+			//Opps, bad state
+			default:	//Bad State
 			cmdUpdate(false, false, false);
 			System.out.println("LED Blink bad state - " + state);
 
@@ -114,16 +171,21 @@ public class LEDBlink {
 	 * Items that we may want to adjust.
 	 */
 	private static void sdbInit(){
+		SmartDashboard.putNumber("LED/Blink/Time delay", delay);
 	}
 
 	/**
 	 * Update to Smartdashboard.
 	 */
 	private static void sdbUpdate(){
+        SmartDashboard.putNumber("LED/Blink/state", state);
+		delay = SmartDashboard.getNumber("LED/Blink/Time delay", delay);
+
         SmartDashboard.putBoolean("LED/Tgr/Red", tgrRed.isDown());
         SmartDashboard.putBoolean("LED/Tgr/Yel", tgrYel.isDown());
         SmartDashboard.putBoolean("LED/Tgr/Grn", tgrGrn.isDown());
         SmartDashboard.putBoolean("LED/Tgr/Left", tgrLeft.isDown());
+        SmartDashboard.putBoolean("LED/Tgr/Right", tgrRight.isDown());
 
         SmartDashboard.putBoolean("LED/Out/Red", ledRed.get());
         SmartDashboard.putBoolean("LED/Out/Yel", ledYel.get());
