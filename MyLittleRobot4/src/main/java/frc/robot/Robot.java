@@ -12,6 +12,7 @@ import frc.robot.subsystem.LEDBlink1;
 import frc.robot.subsystem.LEDBlink2;
 import frc.robot.subsystem.LEDBlink3;
 import frc.robot.subsystem.LEDBlink4;
+import frc.robot.subsystem.LEDBlink5;
 import frc.robot.subsystem.LEDControl;
 
 /**

@@ -12,7 +12,7 @@ import frc.io.joysticks.util.Button;
 import frc.util.Timer;
 
 /** Have joystick buttons trigger various LED patterns */
-public class LEDBlink {
+public class LEDBlink5 {
 	//Declare Hardware outputs and reference hdw defined in IO.java.
     private static DigitalOutput ledRed = IO.doLedRed;
 	private static DigitalOutput ledYel = IO.doLedYel;
@@ -33,7 +33,7 @@ public class LEDBlink {
 	/**
 	 * Constructor, default.  No action, for standards only.
 	 */
-	private LEDBlink(){}
+	private LEDBlink5(){}
 	
 	/**
 	 * Initialize anything needed for LEDControl.
@@ -53,30 +53,21 @@ public class LEDBlink {
 	 * <p>BUT don't switch sequence until running sequence is complete.
 	 * <p>AND button should only need to be pressed, not held for upto 2 sec.
 	 * <p>AND After safety Left is released resume last sequence.  Right cancels all seq when done.
-	 * <p>OH while you're at it, make the 1.0 sec. time adjustable from the SDB.
 	 * <p>Usually called from robot.java.
 	 */
 	public static void update(){
-		if(tgrRight.isDown()) newState = 0;	//Shutdown at end of present sequence
-		if(tgrLeft.isDown()) state = 90;	//Safety, all off now.  Restart at prv seq. when released.
-		if(tgrRed.isDown())  newState = 1;	//Do Red sequence when running sequence is complete
-		if(tgrYel.isDown())  newState = 11;	//Do Yel sequence when running sequence is complete
-		if(tgrGrn.isDown())  newState = 21;	//Do Grn sequence when running sequence is complete
+		if(tgrRight.isDown()) newState = 0;
+		if(tgrLeft.isDown()) state = 90;
+		if(tgrRed.isDown())  newState = 1;
+		if(tgrYel.isDown())  newState = 11;
+		if(tgrGrn.isDown())  newState = 21;
 
-		smUpdate();		//Update state machine
-		sdbUpdate();	//Update Smartdashboard
+		smUpdate();
+		sdbUpdate();
 	}
 
 	/**
 	 * State Machine Update.
-	 * <p>0 - Default, All off
-	 * <p>1 - Start, Do Red trigger, Red LED 1.0s
-	 * <p>2 - next Yel, Yel LED 0.5s
-	 * <p>3 - next Grn, Grn LED 0.5s
-	 * <p>4 - next, Chk for other triggers else Return to 1
-	 * <p>11-14 - Yel Seq, Yel 1.0s, Grn 0.5s, Red 0.5
-	 * <p>21-24 - Grn Seq, Grn 1.0s, Red 0.5s, Yel 0.
-	 * <p>90 - Left Safety.  All off but return to last seq.
 	 */
 	public static void smUpdate(){
 		switch(state){
@@ -99,7 +90,8 @@ public class LEDBlink {
 			cmdUpdate(false, false, true);
 			break;
 			case 4:	//Chk for other trigger else Return to Red
-			state = newState != 1 ? newState : 1;
+			state = 1;
+			if(newState != 1) state = newState;
 			cmdUpdate(false, false, true);
 			break;
 			//--- Do Yel trigger ---
@@ -116,7 +108,8 @@ public class LEDBlink {
 			cmdUpdate(true, false, false);
 			break;
 			case 14:	//Chk for other trigger else Return to Yel
-			state = newState != 11 ? newState : 11;
+			state = 11;
+			if(newState != 11) state = newState;
 			cmdUpdate(true, false, false);
 			break;
 			//--- Do Grn trigger ---
@@ -133,10 +126,11 @@ public class LEDBlink {
 			cmdUpdate(false, true, false);
 			break;
 			case 24:	//Chk for other trigger else Return to Red
-			state = newState != 21 ? newState : 21;
+			state = 21;
+			if(newState != 21) state = newState;
 			cmdUpdate(false, true, false);
 			break;
-			//Left Safety.  All off but return to last seq.
+			//All off but return to last seq.
 			case 90:	//All off but return.
 			if(!tgrLeft.isUp()) state++;
 			cmdUpdate(false, false, false);
