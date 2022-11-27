@@ -64,6 +64,7 @@ public class LEDBlink1 {
 			case 0:	//All off
 			//         Red    Yel    Grn  Cmds
 			cmdUpdate(false, false, false);
+			stateTmr.clearTimer();
 			break;
 			//--- Do Red trigger ---
 			case 1:	//Red for 1 sec.
