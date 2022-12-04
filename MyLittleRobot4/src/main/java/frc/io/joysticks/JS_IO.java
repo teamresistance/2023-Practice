@@ -37,6 +37,13 @@ public class JS_IO {
     public static Joystick neoPad = new Joystick(4);        // Nintendo pamepad
 
     // Drive
+    public static Axis leftX = new Axis();
+    public static Axis leftY = new Axis();
+    public static Axis rightX = new Axis();
+    public static Axis rightY = new Axis();
+    public static Axis coDvrX = new Axis();
+    public static Axis coDvrY = new Axis();
+
     // Misc
     public static Button jsBtnRed= new Button();
     public static Button jsBtnYel = new Button();
@@ -127,6 +134,12 @@ public class JS_IO {
         System.out.println("JS assigned to 3JS");
 
         // All stick axisesssss
+        leftX.setAxis(leftJoystick, 0);
+        leftY.setAxis(leftJoystick, 1);
+        rightX.setAxis(rightJoystick, 0);
+        rightY.setAxis(rightJoystick, 1);
+        coDvrX.setAxis(coJoystick, 0);
+        coDvrY.setAxis(coJoystick, 1);
 
         // Buttons
         jsBtnRed.setButton(leftJoystick, 3);
@@ -150,6 +163,11 @@ public class JS_IO {
      */
     private static void a_GP() {
         System.out.println("JS assigned to GP");
+        //Drive
+        leftX.setAxis(gamePad, 0);
+        leftY.setAxis(gamePad, 1);
+        rightX.setAxis(gamePad, 4);
+        rightY.setAxis(gamePad, 5);
 
         // Button
         jsBtnRed.setButton(gamePad, 2);
@@ -183,6 +201,14 @@ public class JS_IO {
      */
     private static void caseDefault() {
         System.out.println("JS assigned to null");
+        // All stick axisesssss
+        leftX.setAxis();
+        leftY.setAxis();
+        rightX.setAxis(null, 0);
+        rightY.setAxis(null, 0);
+        coDvrX.setAxis(null, 0);
+        coDvrY.setAxis(null, 0);
+
 
         // Buttons
         jsBtnRed.setButton(null, 0);

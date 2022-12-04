@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.io.hdw_io.IO;
 import frc.io.joysticks.JS_IO;
+import frc.robot.subsystem.Drive;
 import frc.robot.subsystem.LEDBlink;
 import frc.robot.subsystem.LEDBlink1;
 import frc.robot.subsystem.LEDBlink2;
@@ -69,6 +70,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		// LEDControl.init();	   //Initialize LED Control
 		LEDBlink.init();		//Initialize LED Blink
+		Drive.init();
 	}
 
 	/** This function is called periodically during operator control. */
@@ -76,6 +78,7 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		// LEDControl.update();	//Update LED Control
 		LEDBlink.update();		//Update LED Blink
+		Drive.update();
 	}
 
 	/** This function is called once when the robot is disabled. */

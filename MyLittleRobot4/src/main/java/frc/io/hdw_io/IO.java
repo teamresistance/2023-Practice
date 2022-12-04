@@ -1,10 +1,21 @@
 package frc.io.hdw_io;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.io.hdw_io.util.*;
 
 
 public class IO {
+    //NavX
+    public static NavX navX = new NavX(SPI.Port.kMXP);
+    //Drive
+    public static WPI_TalonSRX drvTSRX_L = new WPI_TalonSRX(56); // Cmds left wheels. Includes encoders
+    public static WPI_TalonSRX drvTSRX_R = new WPI_TalonSRX(57); // Cmds right wheels. Includes encoders
+    public static DifferentialDrive diffDrv_M = new DifferentialDrive(IO.drvTSRX_L, IO.drvTSRX_R);
+
     // DigitalInputs
     public static InvertibleDigitalInput diBtnRed = new InvertibleDigitalInput(4, false);
     public static InvertibleDigitalInput diBtnYel = new InvertibleDigitalInput(5, false);
